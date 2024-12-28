@@ -3,7 +3,8 @@ import useGameStore from '@/stores/game';
 import { computed } from 'vue';
 
 const gameStore = useGameStore();
-const size = computed(() => gameStore.squareSize);
+const size = computed(() => `${gameStore.squareSize}px`);
+const fontSize = computed(() => `${gameStore.fontSize}ex`);
 
 </script>
 <template>
@@ -18,7 +19,7 @@ const size = computed(() => gameStore.squareSize);
 
 <style scoped lang="less">
 .row-helper-container {
-  font-size: v-bind('`${size / 8}ex`');
+  font-size: v-bind(fontSize);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -27,11 +28,11 @@ const size = computed(() => gameStore.squareSize);
   margin-right: 0.5em;
   .row-helper {
     display: flex;
-    height: v-bind('`${size / 1}px`');
+    height: v-bind(size);
     gap: 0.5em;
     div {
       width: 1rem;
-      height: v-bind('`${size / 1}px`');
+      height: v-bind(size);
       display: flex;
       justify-content: center;
       align-items: center;

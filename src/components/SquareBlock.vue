@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const gameStore = useGameStore();
 const state = computed(() => props.board[props.row][props.column]);
-const size = computed(() => gameStore.squareSize);
+const size = computed(() => gameStore.squareSize+'px');
 const isRowFiveModule = computed(() => {
   if (props.row === props.board.length - 1) {
     return false;
@@ -42,17 +42,20 @@ const squareClass = computed(() => (state.value === 1
   />
 </template>
 
-<style scoped>
+<style scoped lang="less">
+@border-style: solid;
+@border-color: #b9b9b9;
+@size: v-bind(size);
 
 .square {
-  width: v-bind('`${size}px`');
-  height: v-bind('`${size}px`');
-  outline: 1px solid #b9b9b9;
+  width: @size;
+  height: @size;
+  outline: 1px @border-style @border-color;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: v-bind('`${isRowFiveModule ? 2 : 0}px`') solid #b9b9b9;
-  border-right: v-bind('`${isColumnFiveModule ? 2 : 0}px`') solid #b9b9b9;
+  border-bottom: v-bind('`${isRowFiveModule ? 2 : 0}px`') @border-style @border-color;
+  border-right: v-bind('`${isColumnFiveModule ? 2 : 0}px`') @border-style @border-color;
   &.black {
     background-color: black;
   }

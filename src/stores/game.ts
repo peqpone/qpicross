@@ -12,11 +12,9 @@ export default defineStore('game', () => {
   const squareSize = ref(20);
   const boardSize = ref(10);
 
-  const resultBoard = ref<Board>([
-    [0, 1, 0],
-    [1, 0, 0],
-    [0, 0, 1],
-  ]);
+  const resultBoard = ref<Board>([]);
+
+  const fontSize = computed(() => squareSize.value/8);
 
   const columnHelper = computed<Helper>(() => resultBoard.value[0]
     .map((_, index) => {
@@ -93,6 +91,7 @@ export default defineStore('game', () => {
     changeSquare,
     boardSize,
     squareSize,
+    fontSize,
     getColumn,
     getRow,
     generateRandom,
