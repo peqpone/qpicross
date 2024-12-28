@@ -14,7 +14,7 @@ export default defineStore('game', () => {
 
   const resultBoard = ref<Board>([]);
 
-  const fontSize = computed(() => squareSize.value / 8);
+  const fontSize = computed(() => squareSize.value / 10);
 
   const columnHelper = computed<Helper>(() => resultBoard.value[0]
     .map((_, index) => {
