@@ -9,7 +9,7 @@ import TheBoard from '@/components/TheBoard.vue';
 <template>
   <div class="container">
     <div class="title-container">qpicross</div>
-    <div class="board-container">
+    <div class="position-relative">
       <the-column-helper />
       <the-row-helper />
       <the-board />
@@ -25,17 +25,14 @@ import TheBoard from '@/components/TheBoard.vue';
   justify-content: center;
   height: 100%;
   align-items: center;
-  .board-container {
-    position: relative;
+  .title-container {
+    font-size: 2rem;
+    margin-bottom: 1em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
   }
-}
-.title-container {
-  font-size: 2rem;
-  margin-bottom: 1em;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
 }
 </style>
