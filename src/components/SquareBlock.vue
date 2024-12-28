@@ -14,7 +14,7 @@ const props = defineProps<{
 
 const gameStore = useGameStore();
 const state = computed(() => props.board[props.row][props.column]);
-const size = computed(() => gameStore.squareSize+'px');
+const size = computed(() => `${gameStore.squareSize}px`);
 const isRowFiveModule = computed(() => {
   if (props.row === props.board.length - 1) {
     return false;
