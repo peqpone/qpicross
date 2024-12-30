@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import {computed, ref, watch} from 'vue';
 import useGameStore from '@/stores/game';
+import { useElementHover, useMousePressed } from '@vueuse/core';
 
 const props = defineProps<{
   column: number;
   row: number;
 }>();
 
+const squareElement = ref();
+
 const gameStore = useGameStore();
+const isHovered = useElementHover(squareElement);
+const { pressed } = useMousePressed();
 
 const board = computed(() => (
   gameStore.isGameStarted
@@ -46,14 +51,20 @@ const changeSquareState = () => {
   gameStore.changeSquare(props.row, props.column);
 };
 
+watch(isHovered, (value) => {
+  if (value && pressed.value) {
+    changeSquareState();
+  }
+});
+
 </script>
 
 <template>
   <div
     class="square"
     :class="squareClass"
+    ref="squareElement"
     @mousedown="changeSquareState"
-    @keydown="changeSquareState"
   >
     <v-icon v-if="state === undefined" icon="mdi-close" />
   </div>
