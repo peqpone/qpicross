@@ -4,18 +4,17 @@ import TheRowHelper from '@/components/TheRowHelper.vue';
 import TheColumnHelper from '@/components/TheColumnHelper.vue';
 import TheBoard from '@/components/TheBoard.vue';
 import TheLogo from '@/components/TheLogo.vue';
-
+import TheModeSwitch from '@/components/TheModeSwitch.vue';
 </script>
 
 <template>
   <div class="container">
-    <div class="title-container">
-      <the-logo />
-    </div>
+    <the-logo />
     <div class="position-relative">
       <the-column-helper />
       <the-row-helper />
       <the-board />
+      <the-mode-switch />
     </div>
     <the-controls />
   </div>
@@ -28,14 +27,5 @@ import TheLogo from '@/components/TheLogo.vue';
   justify-content: center;
   height: 100%;
   align-items: center;
-  .title-container {
-    font-size: 2rem;
-    margin-bottom: 1em;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
-  }
 }
 </style>

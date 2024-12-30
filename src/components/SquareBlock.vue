@@ -9,10 +9,15 @@ const props = defineProps<{
 
 const gameStore = useGameStore();
 
-const board = computed(() => (gameStore.isGameStarted ? gameStore.gameBoard : gameStore.resultBoard));
+const board = computed(() => (
+  gameStore.isGameStarted
+    ? gameStore.gameBoard
+    : gameStore.resultBoard
+));
 const state = computed(() => board.value[props.row][props.column]);
 
 const size = computed(() => `${gameStore.squareSize}px`);
+const fontSize = computed(() => `${gameStore.fontSize}ex`);
 const isRowFiveModule = computed(() => {
   if (props.row === board.value.length - 1) {
     return false;
@@ -26,18 +31,30 @@ const isColumnFiveModule = computed(() => {
   return (props.column + 1) % 5 === 0;
 });
 
-const squareClass = computed(() => (state.value === 1
-  ? 'black'
-  : 'white'));
+const squareClass = computed(() => {
+  if (state.value === undefined) {
+    return 'white';
+  }
+  return state.value === 1
+    ? 'black'
+    : 'white';
+});
+
+const changeSquareState = () => {
+  gameStore.changeSquare(props.row, props.column);
+};
+
 </script>
 
 <template>
   <div
     class="square"
     :class="squareClass"
-    @click="gameStore.changeSquare(row, column)"
-    @keydown="gameStore.changeSquare(row, column)"
-  />
+    @mousedown="changeSquareState"
+    @keydown="changeSquareState"
+  >
+    <v-icon v-if="state === undefined" icon="mdi-close" />
+  </div>
 </template>
 
 <style scoped lang="less">
@@ -54,6 +71,8 @@ const squareClass = computed(() => (state.value === 1
   align-items: center;
   border-bottom: v-bind('`${isRowFiveModule ? 2 : 0}px`') @border-style @border-color;
   border-right: v-bind('`${isColumnFiveModule ? 2 : 0}px`') @border-style @border-color;
+  font-size: v-bind(fontSize);
+  color: @border-color;
   &.black {
     background-color: black;
   }

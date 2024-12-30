@@ -3,7 +3,7 @@ import {
 } from 'vue';
 import { defineStore } from 'pinia';
 
-type Square = 1 | 0;
+type Square = 1 | 0 | undefined;
 type Column = Array<Square>;
 type Board = Array<Column>;
 type Helper = Array<Array<number | never>>;
@@ -12,6 +12,8 @@ export default defineStore('game', () => {
   const squareSize = ref(20);
   const boardSize = ref(10);
   const isGameStarted = ref(false);
+  const level = ref(0.4);
+  const drawMode = ref(true);
 
   const resultBoard = ref<Board>([]);
   const gameBoard = ref<Board>([]);
@@ -57,9 +59,17 @@ export default defineStore('game', () => {
   const changeSquare = (row: number, column: number) => {
     const board = isGameStarted.value ? gameBoard : resultBoard;
     const square = board.value[row][column];
-    board.value[row][column] = square === 0
-      ? 1
-      : 0;
+    console.log('changeSquare', row, column, square);
+
+    if (drawMode.value) {
+      board.value[row][column] = square === 0
+        ? 1
+        : 0;
+    } else {
+      board.value[row][column] = square === undefined
+        ? 0
+        : undefined;
+    }
   };
 
   const getEmptyBoard = () => Array
@@ -70,20 +80,22 @@ export default defineStore('game', () => {
 
   const getColumn = (column: number): Column => resultBoard.value.map((row) => row[column]);
 
-  const generateRandom = () => {
-    resultBoard.value = Array
-      .from({ length: boardSize.value }, () => Array
-        .from({ length: boardSize.value }, () => (Math.random() > 0.5 ? 1 : 0 as Square)));
-  };
-
-  const startGame = () => {
-    isGameStarted.value = true;
-  };
-
   const resetGame = () => {
     isGameStarted.value = false;
     resultBoard.value = getEmptyBoard();
     gameBoard.value = getEmptyBoard();
+    drawMode.value = true;
+  };
+
+  const generateRandom = () => {
+    resetGame();
+    resultBoard.value = Array
+      .from({ length: boardSize.value }, () => Array
+        .from({ length: boardSize.value }, () => (Math.random() > level.value ? 1 : 0 as Square)));
+  };
+
+  const startGame = () => {
+    isGameStarted.value = true;
   };
 
   onBeforeMount(() => {
@@ -99,6 +111,8 @@ export default defineStore('game', () => {
   return {
     resultBoard,
     gameBoard,
+    level,
+    drawMode,
     columnHelper,
     rowHelper,
     changeSquare,
