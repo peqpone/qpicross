@@ -2,6 +2,7 @@
 
 Simplest Picross (nonograms) generator and game with Vue 3 and Vite.
 
+visit at [https://qpicross.peq.pe](https://qpicross.peq.pe)
 
 ## Recommended IDE Setup
 
