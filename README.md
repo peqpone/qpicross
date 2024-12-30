@@ -1,6 +1,7 @@
-# vite-project
+# qpicross
 
-This template should help get you started developing with Vue 3 in Vite.
+Simplest Picross (nonograms) generator and game with Vue 3 and Vite.
+
 
 ## Recommended IDE Setup
 
