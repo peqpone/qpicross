@@ -9,7 +9,7 @@ const fontSize = computed(() => `${gameStore.fontSize}ex`);
 </script>
 <template>
   <div class="column-helper-container">
-    <div v-for="(helper, key) in gameStore.columnHelper" :key class="column-helper">
+    <div v-for="(helper, key) in gameStore.columnHelper" :key class="column-helper" :class="gameStore.isColumnCompleted(key) ? 'complete' : ''">
       <div v-for="(value, valueKey) in helper" :key="valueKey">
         {{ value }}
       </div>
@@ -31,6 +31,9 @@ const fontSize = computed(() => `${gameStore.fontSize}ex`);
     justify-content: flex-end;
     width: v-bind(size);
     gap: 0.5em;
+    &.complete {
+      opacity: 0.4;
+    }
     div {
       width: v-bind(size);
       height: 1rem;

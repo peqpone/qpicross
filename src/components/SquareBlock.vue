@@ -18,12 +18,14 @@ const state = computed(() => board.value[props.row][props.column]);
 
 const size = computed(() => `${gameStore.squareSize}px`);
 const fontSize = computed(() => `${gameStore.fontSize}ex`);
+
 const isRowFiveModule = computed(() => {
   if (props.row === board.value.length - 1) {
     return false;
   }
   return (props.row + 1) % 5 === 0;
 });
+
 const isColumnFiveModule = computed(() => {
   if (props.column === board.value[0].length - 1) {
     return false;

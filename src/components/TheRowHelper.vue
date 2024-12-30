@@ -9,7 +9,7 @@ const fontSize = computed(() => `${gameStore.fontSize}ex`);
 </script>
 <template>
   <div class="row-helper-container">
-    <div v-for="(helper, key) in gameStore.rowHelper" :key class="row-helper">
+    <div v-for="(helper, key) in gameStore.rowHelper" :key class="row-helper" :class="gameStore.isRowCompleted(key) ? 'complete' : ''">
       <div v-for="(value, valueKey) in helper" :key="valueKey">
         {{ value }}
       </div>
@@ -30,6 +30,9 @@ const fontSize = computed(() => `${gameStore.fontSize}ex`);
     display: flex;
     height: v-bind(size);
     gap: 0.5em;
+    &.complete {
+      opacity: 0.4;
+    }
     div {
       width: 1rem;
       height: v-bind(size);

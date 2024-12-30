@@ -1,5 +1,5 @@
 import {
-  onBeforeMount, ref, watch, computed,
+  computed, onBeforeMount, ref, watch,
 } from 'vue';
 import { defineStore } from 'pinia';
 
@@ -56,6 +56,51 @@ export default defineStore('game', () => {
       return result;
     }));
 
+  const getRow = (row: number, board = resultBoard): Column => board.value[row];
+
+  const getColumn = (column: number, board = resultBoard): Column => board.value
+    .map((row) => row[column]);
+
+  const fillRowWithUndefined = (row: number) => {
+    gameBoard.value[row] = getRow(row, gameBoard)
+      .map((square) => (square === 0 ? undefined : square));
+  };
+
+  const fillColumnWithUndefined = (column: number) => {
+    gameBoard.value.forEach((row, index) => {
+      if (row[column] === 0) {
+        gameBoard.value[index][column] = undefined;
+      }
+    });
+  };
+
+  const isRowCompleted = (row: number) => {
+    const resultRow = getRow(row);
+    const gameRow = getRow(row, gameBoard)
+      .map((square) => (square === undefined ? 0 : square));
+    return resultRow.every((square, index) => square === gameRow[index]);
+  };
+
+  const isColumnCompleted = (column: number) => {
+    const resultColumn = getColumn(column);
+    const gameColumn = getColumn(column, gameBoard)
+      .map((square) => (square === undefined ? 0 : square));
+    return resultColumn.every((square, index) => square === gameColumn[index]);
+  };
+
+  const isGameCompleted = computed(() => isGameStarted.value
+      && resultBoard.value.every((_, index) => isRowCompleted(index))
+        && resultBoard.value[0].every((_, index) => isColumnCompleted(index)));
+
+  const fillEmptySquares = (row: number, column: number) => {
+    if (isRowCompleted(row)) {
+      fillRowWithUndefined(row);
+    }
+    if (isColumnCompleted(column)) {
+      fillColumnWithUndefined(column);
+    }
+  };
+
   const changeSquare = (row: number, column: number) => {
     const board = isGameStarted.value ? gameBoard : resultBoard;
     const square = board.value[row][column];
@@ -70,15 +115,12 @@ export default defineStore('game', () => {
         ? 0
         : undefined;
     }
+    fillEmptySquares(row, column);
   };
 
   const getEmptyBoard = () => Array
     .from({ length: boardSize.value }, () => Array
       .from({ length: boardSize.value }, () => 0 as Square));
-
-  const getRow = (row: number): Column => resultBoard.value[row];
-
-  const getColumn = (column: number): Column => resultBoard.value.map((row) => row[column]);
 
   const resetGame = () => {
     isGameStarted.value = false;
@@ -125,5 +167,8 @@ export default defineStore('game', () => {
     startGame,
     isGameStarted,
     resetGame,
+    isColumnCompleted,
+    isRowCompleted,
+    isGameCompleted,
   };
 });

@@ -5,6 +5,7 @@ import TheColumnHelper from '@/components/TheColumnHelper.vue';
 import TheBoard from '@/components/TheBoard.vue';
 import TheLogo from '@/components/TheLogo.vue';
 import TheModeSwitch from '@/components/TheModeSwitch.vue';
+import TheWin from '@/components/TheWin.vue';
 </script>
 
 <template>
@@ -15,6 +16,7 @@ import TheModeSwitch from '@/components/TheModeSwitch.vue';
       <the-row-helper />
       <the-board />
       <the-mode-switch />
+      <the-win />
     </div>
     <the-controls />
   </div>
