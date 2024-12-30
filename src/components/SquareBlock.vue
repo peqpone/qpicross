@@ -2,27 +2,25 @@
 import { computed } from 'vue';
 import useGameStore from '@/stores/game';
 
-type Square = 1 | 0;
-type Column = Array<Square>;
-type Board = Array<Column>;
-
 const props = defineProps<{
   column: number;
   row: number;
-  board: Board;
 }>();
 
 const gameStore = useGameStore();
-const state = computed(() => props.board[props.row][props.column]);
+
+const board = computed(() => (gameStore.isGameStarted ? gameStore.gameBoard : gameStore.resultBoard));
+const state = computed(() => board.value[props.row][props.column]);
+
 const size = computed(() => `${gameStore.squareSize}px`);
 const isRowFiveModule = computed(() => {
-  if (props.row === props.board.length - 1) {
+  if (props.row === board.value.length - 1) {
     return false;
   }
   return (props.row + 1) % 5 === 0;
 });
 const isColumnFiveModule = computed(() => {
-  if (props.column === props.board[0].length - 1) {
+  if (props.column === board.value[0].length - 1) {
     return false;
   }
   return (props.column + 1) % 5 === 0;

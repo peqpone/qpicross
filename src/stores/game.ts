@@ -11,8 +11,10 @@ type Helper = Array<Array<number | never>>;
 export default defineStore('game', () => {
   const squareSize = ref(20);
   const boardSize = ref(10);
+  const isGameStarted = ref(false);
 
   const resultBoard = ref<Board>([]);
+  const gameBoard = ref<Board>([]);
 
   const fontSize = computed(() => squareSize.value / 10);
 
@@ -53,17 +55,16 @@ export default defineStore('game', () => {
     }));
 
   const changeSquare = (row: number, column: number) => {
-    const square = resultBoard.value[row][column];
-    resultBoard.value[row][column] = square === 0
+    const board = isGameStarted.value ? gameBoard : resultBoard;
+    const square = board.value[row][column];
+    board.value[row][column] = square === 0
       ? 1
       : 0;
   };
 
-  const initBoard = () => {
-    resultBoard.value = Array
-      .from({ length: boardSize.value }, () => Array
-        .from({ length: boardSize.value }, () => 0 as Square));
-  };
+  const getEmptyBoard = () => Array
+    .from({ length: boardSize.value }, () => Array
+      .from({ length: boardSize.value }, () => 0 as Square));
 
   const getRow = (row: number): Column => resultBoard.value[row];
 
@@ -75,17 +76,29 @@ export default defineStore('game', () => {
         .from({ length: boardSize.value }, () => (Math.random() > 0.5 ? 1 : 0 as Square)));
   };
 
+  const startGame = () => {
+    isGameStarted.value = true;
+  };
+
+  const resetGame = () => {
+    isGameStarted.value = false;
+    resultBoard.value = getEmptyBoard();
+    gameBoard.value = getEmptyBoard();
+  };
+
   onBeforeMount(() => {
     console.log('Game store mounted');
-    initBoard();
+
+    resetGame();
   });
 
   watch(boardSize, () => {
-    initBoard();
+    resetGame();
   });
 
   return {
     resultBoard,
+    gameBoard,
     columnHelper,
     rowHelper,
     changeSquare,
@@ -95,5 +108,8 @@ export default defineStore('game', () => {
     getColumn,
     getRow,
     generateRandom,
+    startGame,
+    isGameStarted,
+    resetGame,
   };
 });

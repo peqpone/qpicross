@@ -12,7 +12,6 @@ const gameStore = useGameStore();
         :column="columnKey"
         :row="rowKey"
         :key="`${columnKey}-${rowKey}`"
-        :board="gameStore.resultBoard"
       />
     </div>
   </div>

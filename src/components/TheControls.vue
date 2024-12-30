@@ -28,6 +28,8 @@ const gameStore = useGameStore();
       </template>
     </v-slider>
     <v-btn @click="gameStore.generateRandom">Random</v-btn>
+    <v-btn @click="gameStore.startGame">Start</v-btn>
+    <v-btn @click="gameStore.resetGame">Reset</v-btn>
   </div>
 </template>
 

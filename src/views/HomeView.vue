@@ -3,12 +3,15 @@ import TheControls from '@/components/TheControls.vue';
 import TheRowHelper from '@/components/TheRowHelper.vue';
 import TheColumnHelper from '@/components/TheColumnHelper.vue';
 import TheBoard from '@/components/TheBoard.vue';
+import TheLogo from '@/components/TheLogo.vue';
 
 </script>
 
 <template>
   <div class="container">
-    <div class="title-container">qpicross</div>
+    <div class="title-container">
+      <the-logo />
+    </div>
     <div class="position-relative">
       <the-column-helper />
       <the-row-helper />
