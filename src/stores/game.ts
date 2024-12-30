@@ -104,7 +104,6 @@ export default defineStore('game', () => {
   const changeSquare = (row: number, column: number) => {
     const board = isGameStarted.value ? gameBoard : resultBoard;
     const square = board.value[row][column];
-    console.log('changeSquare', row, column, square);
 
     if (drawMode.value) {
       board.value[row][column] = square === 0
