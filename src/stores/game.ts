@@ -1,11 +1,17 @@
 import {
   computed, onBeforeMount, ref, watch,
 } from 'vue';
+import type { Ref } from 'vue';
 import { defineStore } from 'pinia';
 
-type Square = 1 | 0 | undefined;
-type Column = Array<Square>;
-type Board = Array<Column>;
+type BoardType = 'result' | 'game';
+
+type Square<BT = 'result'> = BT extends 'result'
+  ? 1 | 0
+  : 1 | 0 | undefined;
+
+type Column<BT = 'result'> = Array<Square<BT>>;
+type Board<BT = 'result'> = Array<Column<BT>>;
 type Helper = Array<Array<number | never>>;
 
 export default defineStore('game', () => {
@@ -15,8 +21,8 @@ export default defineStore('game', () => {
   const level = ref(0.4);
   const drawMode = ref(true);
 
-  const resultBoard = ref<Board>([]);
-  const gameBoard = ref<Board>([]);
+  const resultBoard = ref<Board<'result'>>([]);
+  const gameBoard = ref<Board<'game'>>([]);
 
   const fontSize = computed(() => squareSize.value / 10);
 
@@ -56,17 +62,23 @@ export default defineStore('game', () => {
       return result;
     }));
 
-  const getRow = (row: number, board = resultBoard): Column => board.value[row];
+  const getRow = (
+    row: number,
+    board: Ref<Board<BoardType>> = resultBoard,
+  ): Column<BoardType> => board.value[row];
 
-  const getColumn = (column: number, board = resultBoard): Column => board.value
+  const getColumn = (
+    column: number,
+    board: Ref<Board<BoardType>> = resultBoard,
+  ): Column<BoardType> => board.value
     .map((row) => row[column]);
 
-  const fillRowWithUndefined = (row: number) => {
+  const fillRowWithCrosses = (row: number) => {
     gameBoard.value[row] = getRow(row, gameBoard)
       .map((square) => (square === 0 ? undefined : square));
   };
 
-  const fillColumnWithUndefined = (column: number) => {
+  const fillColumnWithCrosses = (column: number) => {
     gameBoard.value.forEach((row, index) => {
       if (row[column] === 0) {
         gameBoard.value[index][column] = undefined;
@@ -94,10 +106,10 @@ export default defineStore('game', () => {
 
   const fillEmptySquares = (row: number, column: number) => {
     if (isRowCompleted(row)) {
-      fillRowWithUndefined(row);
+      fillRowWithCrosses(row);
     }
     if (isColumnCompleted(column)) {
-      fillColumnWithUndefined(column);
+      fillColumnWithCrosses(column);
     }
   };
 
@@ -140,8 +152,6 @@ export default defineStore('game', () => {
   };
 
   onBeforeMount(() => {
-    console.log('Game store mounted');
-
     resetGame();
   });
 
@@ -156,18 +166,22 @@ export default defineStore('game', () => {
     drawMode,
     columnHelper,
     rowHelper,
-    changeSquare,
     boardSize,
     squareSize,
     fontSize,
+    isGameStarted,
+
+    isGameCompleted,
+
+    changeSquare,
     getColumn,
     getRow,
     generateRandom,
     startGame,
-    isGameStarted,
     resetGame,
     isColumnCompleted,
     isRowCompleted,
-    isGameCompleted,
+    fillColumnWithCrosses,
+    fillRowWithCrosses,
   };
 });
