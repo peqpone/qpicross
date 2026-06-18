@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {computed, ref, watch} from 'vue';
+import { computed, ref, watch } from 'vue';
+import { useTheme } from 'vuetify';
 import useGameStore from '@/stores/game';
 import { useElementHover, useMousePressed } from '@vueuse/core';
 
@@ -13,6 +14,12 @@ const squareElement = ref();
 const gameStore = useGameStore();
 const isHovered = useElementHover(squareElement);
 const { pressed } = useMousePressed();
+
+const theme = useTheme();
+const isDark = computed(() => theme.global.current.value.dark);
+const squareFilled = computed(() => (isDark.value ? '#e8e8e8' : 'black'));
+const squareEmpty = computed(() => (isDark.value ? '#2d2d2d' : 'white'));
+const borderColor = computed(() => (isDark.value ? '#505050' : '#b9b9b9'));
 
 const board = computed(() => (
   gameStore.isGameStarted
@@ -72,25 +79,24 @@ watch(isHovered, (value) => {
 
 <style scoped lang="less">
 @border-style: solid;
-@border-color: #b9b9b9;
 @size: v-bind(size);
 
 .square {
   width: @size;
   height: @size;
-  outline: 1px @border-style @border-color;
+  outline: 1px @border-style v-bind(borderColor);
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: v-bind('`${isRowFiveModule ? 2 : 0}px`') @border-style @border-color;
-  border-right: v-bind('`${isColumnFiveModule ? 2 : 0}px`') @border-style @border-color;
+  border-bottom: v-bind('`${isRowFiveModule ? 2 : 0}px`') @border-style v-bind(borderColor);
+  border-right: v-bind('`${isColumnFiveModule ? 2 : 0}px`') @border-style v-bind(borderColor);
   font-size: v-bind(fontSize);
-  color: @border-color;
+  color: v-bind(borderColor);
   &.black {
-    background-color: black;
+    background-color: v-bind(squareFilled);
   }
   &.white {
-    background-color: white;
+    background-color: v-bind(squareEmpty);
   }
 }
 </style>

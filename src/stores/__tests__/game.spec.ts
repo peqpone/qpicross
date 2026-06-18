@@ -1,5 +1,5 @@
 import {
-  describe, it, beforeEach, expect,
+  describe, it, beforeAll, beforeEach, expect,
 } from 'vitest';
 import { createTestingPinia } from '@pinia/testing';
 
@@ -8,12 +8,24 @@ import { shallowMount } from '@vue/test-utils';
 import useGameStore from '../game';
 
 describe('Game store', () => {
-  shallowMount({ template: '<div/>' }, {
-    global: {
-      plugins: [createTestingPinia({ stubActions: false })],
-    },
+  let gameStore: ReturnType<typeof useGameStore>;
+
+  beforeAll(() => {
+    shallowMount(
+      {
+        template: '<div/>',
+        setup() {
+          gameStore = useGameStore();
+        },
+      },
+      {
+        global: {
+          plugins: [createTestingPinia({ stubActions: false })],
+        },
+      },
+    );
   });
-  const gameStore = useGameStore();
+
   beforeEach(async () => {
     gameStore.$patch({
       boardSize: 3,

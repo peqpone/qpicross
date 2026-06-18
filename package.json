@@ -19,6 +19,7 @@
     "@vueuse/core": "^12.2.0",
     "D": "^1.0.0",
     "pinia": "^2.1.7",
+    "playwright": "^1.61.0",
     "vite-plugin-vuetify": "^2.0.4",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3",

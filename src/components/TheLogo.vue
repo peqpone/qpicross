@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useTheme } from 'vuetify';
+
+const theme = useTheme();
+const isDark = computed(() => theme.global.current.value.dark);
+
+const saved = localStorage.getItem('theme');
+if (saved) theme.global.name.value = saved;
+
+function toggleTheme() {
+  const next = isDark.value ? 'light' : 'dark';
+  theme.global.name.value = next;
+  localStorage.setItem('theme', next);
+}
+</script>
+
 <template>
   <div class="logo-container">
     <svg
@@ -14,6 +31,13 @@
       <circle cx="28.38" cy="31.55" r="28.38" />
       <circle cx="91.27" cy="31.55" r="28.38" />
     </svg>
+    <v-btn
+      class="theme-toggle"
+      :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+      variant="text"
+      size="small"
+      @click="toggleTheme"
+    />
   </div>
 </template>
 
@@ -27,6 +51,11 @@
   svg {
     max-width: 60px;
     margin: 1em auto;
+  }
+  .theme-toggle {
+    position: absolute;
+    top: 0.5em;
+    right: 1em;
   }
 }
 </style>
